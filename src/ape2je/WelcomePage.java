@@ -37,26 +37,20 @@ public class WelcomePage extends javax.swing.JFrame {
         this.uid=userid;
     }
     public void retrieveData() {
-        String q1 = "SELECT * FROM ValidModules";
+        String q1 = "SELECT * FROM MODULES";
         String MODULES = "";
-        String OCCURENCE = "";
-        String LECTURER = "";
-        String DAY = "";
-        String TIMESTART = "";
-        String TIMEEND = "";
+        String CREDIT = "";
+        String ACTIVITYTYPE = "";
         try {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
             while (rs.next()) {
                 int i = 0;
-                MODULES = rs.getString("MODULES");
-                OCCURENCE = rs.getString("OCCURENCE");
-                LECTURER = rs.getString("LECTURER");
-                DAY = rs.getString("DAY");
-                TIMESTART = rs.getString("TIMESTART");
-                TIMEEND = rs.getString("TIMEEND");
+                MODULES = rs.getString("MODULE");
+                CREDIT = rs.getString("CREDIT");
+                ACTIVITYTYPE = rs.getString("ACTIVITY");
 
-                String tbData[] = {MODULES, OCCURENCE, LECTURER, DAY, TIMESTART, TIMEEND};
+                String tbData[] = {MODULES, CREDIT, ACTIVITYTYPE};
                 i++;
                 DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
 
