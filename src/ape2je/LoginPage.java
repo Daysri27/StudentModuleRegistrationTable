@@ -12,7 +12,7 @@ public class LoginPage extends javax.swing.JFrame {
     Connection con = ConnectDatabase.connectdb();
     PreparedStatement ps = null;
     ResultSet rs = null;
-    String userid = "";
+    static String userid = "";
     /**
      * Creates new form LoginPage
      */
@@ -141,7 +141,8 @@ public class LoginPage extends javax.swing.JFrame {
             ps.setString(2, PasswordTextField.getText());
             rs = ps.executeQuery();
             if (rs.next()) {
-                userid = UserTextField.getText();
+                String Username = UserTextField.getText();
+                setUserID(Username);
                 //wp.setUserID(userid);
                 JOptionPane.showMessageDialog(null, "Halal " + userid);
                 new WelcomePage().setVisible(true);
@@ -198,6 +199,9 @@ public class LoginPage extends javax.swing.JFrame {
         });
     }
 
+    public void setUserID(String x){
+        this.userid=x;
+    }
     public String getUserID() {
         return userid;
     }
