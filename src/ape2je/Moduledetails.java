@@ -20,10 +20,9 @@ public class Moduledetails extends javax.swing.JFrame {
     String module = wp.getModule();
     String credit = wp.getCredit();
     static String occ = "";
-    static String ts = "";
-    static String te = "";
+    static String cap = "";
     /**
-     * Creates new form Moduledetails
+     * Creates new form Module details
      */
     
     public Moduledetails() {
@@ -31,7 +30,12 @@ public class Moduledetails extends javax.swing.JFrame {
         initComponents();
         retrieveData();
     }
-    
+     public void setCap(String x){
+        this.cap=x;
+    }
+    public String getCap() {
+        return cap;
+    }
     public void setOcc(String x){
         this.occ=x;
     }
@@ -40,7 +44,7 @@ public class Moduledetails extends javax.swing.JFrame {
     }
     
     public void retrieveData() {
-        String q1 = "SELECT * FROM VALIDMODULES WHERE MODULES = '" + module + "' ORDER BY OCCURENCE";
+        String q1 = "SELECT * FROM VALIDMODULES2 WHERE MODULES = '" + module + "' ORDER BY OCCURENCE";
         
         String OCC = "";
         String ACTIVITYTYPE = "";
@@ -48,6 +52,7 @@ public class Moduledetails extends javax.swing.JFrame {
         String DAY = "";
         String START = "";
         String END = "";
+        String CAP ="";
         try {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
@@ -59,9 +64,9 @@ public class Moduledetails extends javax.swing.JFrame {
                 DAY = rs.getString("DAY");
                 START = rs.getString("TIMESTART");
                 END = rs.getString("TIMEEND");
-                
+                CAP = rs.getString("CAPACITY");
 
-                String tbData[] = {OCC,ACTIVITYTYPE, LECTURER, DAY, START, END};
+                String tbData[] = {OCC,ACTIVITYTYPE, LECTURER, DAY, START, END,CAP};
                 i++;
                 DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
 
@@ -89,7 +94,6 @@ public class Moduledetails extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
-        setPreferredSize(new java.awt.Dimension(420, 420));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel1.setText("SHOWING TABLE FOR : " + module);
@@ -101,7 +105,7 @@ public class Moduledetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "OCCURENCE", "ACTIVITY", "LECTURER", "DAY", "TIME START", "TIME END"
+                "OCCURENCE", "ACTIVITY", "LECTURER", "DAY", "TIME START", "TIME END", "CAPACITY"
             }
         ));
         jTable1.setColumnSelectionAllowed(true);
@@ -177,6 +181,8 @@ public class Moduledetails extends javax.swing.JFrame {
         int column = 0;
         String o = source.getModel().getValueAt(row,column) + "";
         setOcc(o);
+        String c = source.getModel().getValueAt(row,6) + "";
+        setCap(c);
         String timeS = source.getModel().getValueAt(row,4) + "";
         String timeE = source.getModel().getValueAt(row,5) + "";
         new RegisterModule().setVisible(true);

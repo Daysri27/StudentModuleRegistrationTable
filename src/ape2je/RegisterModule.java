@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import javax.swing.JOptionPane;
-import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author user
@@ -29,15 +31,12 @@ public class RegisterModule extends javax.swing.JFrame {
     String credit = wp.getCredit();
     Moduledetails md = new Moduledetails();
     String occurence = md.getOcc();
-    //String ts = md.getTS();
-    //String te = md.getTE();
+    String cap = md.getCap();
     String activity = "";
     String activity2 = "";
     String module2 = "";
     String occurence2 = "";
     String day = "";
-    
-    
 
     /**
      * Creates new form RegisterModule
@@ -59,10 +58,9 @@ public class RegisterModule extends javax.swing.JFrame {
             ps.setString(1, uid);
             ps.setString(2, module);
             rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -70,53 +68,79 @@ public class RegisterModule extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
+    public boolean checkCapacity() {
+        try {
+            String q2 = "SELECT DISTINCT USERID FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES2 ON USERMODULE.R_MODULE = VALIDMODULES2.MODULES AND USERMODULE.R_OCCURENCE = VALIDMODULES2.OCCURENCE WHERE MODULES = '" + module + "' AND OCCURENCE = " + occurence;
+            int j = 0;
+            ps = con.prepareStatement(q2);
+            rs = ps.executeQuery();
+                while (rs.next()) {
+                    j++;
+                }
+            int i = Integer.parseInt(cap);
+            if (i >= j) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterModule.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     public boolean checkTime() {
-        String q1 = "SELECT * FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES ON USERMODULE.R_MODULE = VALIDMODULES.MODULES WHERE USERMODULE.R_OCCURENCE = VALIDMODULES.OCCURENCE AND USERMODULE.USERID = '"+ uid +"'";
-        String q2 = "SELECT * FROM APP.VALIDMODULES WHERE MODULES = '" + module + "' AND OCCURENCE = "+ occurence;
+        String q1 = "SELECT * FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES2 ON USERMODULE.R_MODULE = VALIDMODULES2.MODULES WHERE USERMODULE.R_OCCURENCE = VALIDMODULES2.OCCURENCE AND USERMODULE.USERID = '" + uid + "'";
+        String q2 = "SELECT * FROM APP.VALIDMODULES2 WHERE MODULES = '" + module + "' AND OCCURENCE = " + occurence;
         try {
             String TIMESTART = "";
             String TIMEEND = "";
             String TIMESTART2 = "";
             String TIMEEND2 = "";
             String DAY2 = "";
+            String CAP = "";
             ps = con.prepareStatement(q2);
             rs = ps.executeQuery();
-            while(rs.next()){
-            DAY2=rs.getString("DAY");
-            TIMESTART2 = rs.getString("TIMESTART");
-            TIMEEND2 = rs.getString("TIMEEND");
-            activity = rs.getString("ACTIVITYTYPE");
-            LocalTime compareStart = LocalTime.parse(TIMESTART2);
-            LocalTime compareEnd = LocalTime.parse(TIMEEND2);
-            ps2 = con.prepareStatement(q1);
-            rs2 = ps2.executeQuery();
-            while (rs2.next()) {
-            day=rs.getString("DAY");
-            TIMESTART = rs2.getString("TIMESTART");
-            TIMEEND = rs2.getString("TIMEEND");
-            activity2 = rs2.getString("ACTIVITYTYPE");
-            module2 = rs2.getString("MODULES");
-            occurence2 = rs2.getString("OCCURENCE");
-            LocalTime targetStart = LocalTime.parse(TIMESTART);
-            LocalTime targetEnd = LocalTime.parse(TIMEEND);
-            boolean NoClashClassAfterEnd = false;
-            boolean NoClashClassBeforeStart=false;
-            if(day==DAY2){
-            NoClashClassAfterEnd = (targetStart.isAfter(compareEnd)||targetStart.equals(compareEnd));
-            NoClashClassBeforeStart = (targetEnd.isBefore(compareStart)||targetEnd.equals(compareStart));
+            while (rs.next()) {
+                DAY2 = rs.getString("DAY");
+                TIMESTART2 = rs.getString("TIMESTART");
+                TIMEEND2 = rs.getString("TIMEEND");
+                activity = rs.getString("ACTIVITYTYPE");
+                LocalTime compareStart = LocalTime.parse(TIMESTART2);
+                LocalTime compareEnd = LocalTime.parse(TIMEEND2);
+                ps2 = con.prepareStatement(q1);
+                rs2 = ps2.executeQuery();
+                while (rs2.next()) {
+                    day = rs.getString("DAY");
+                    TIMESTART = rs2.getString("TIMESTART");
+                    TIMEEND = rs2.getString("TIMEEND");
+                    activity2 = rs2.getString("ACTIVITYTYPE");
+                    module2 = rs2.getString("MODULES");
+                    occurence2 = rs2.getString("OCCURENCE");
+                    LocalTime targetStart = LocalTime.parse(TIMESTART);
+                    LocalTime targetEnd = LocalTime.parse(TIMEEND);
+                    if (day == null ? DAY2 == null : day.equals(DAY2)) {
+                        
+                        boolean NoClashClassAfterEnd = (targetStart.isAfter(compareEnd) || targetStart.equals(compareEnd));
+                        boolean NoClashClassBeforeStart = (targetEnd.isBefore(compareStart) || targetEnd.equals(compareStart));
+                        JOptionPane.showMessageDialog(null, NoClashClassAfterEnd + " " + NoClashClassBeforeStart);
+                        if (NoClashClassAfterEnd || NoClashClassBeforeStart) {
+                            
+                            continue;
+                        } else {
+                            
+                            return true;
+                        }
+                    }
+                }
             }
-            if(NoClashClassAfterEnd||NoClashClassBeforeStart)
-                return false;
-            else
-                return true;
-            }
-        }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
         return false;
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -195,26 +219,29 @@ public class RegisterModule extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         //String q1 = "CREATE TABLE IF NOT EXISTS USERMODULE (USERID VARCHAR(45) NOT NULL, R_MODULE VARCHAR(45) NOT NULL, R_OCCURENCE INTEGER DEFAULT 0  NOT NULL)";
-        String q2 = "INSERT INTO APP.USERMODULE (USERID, R_MODULE, R_OCCURENCE) VALUES ('" + uid +"', '" + module + "', " + occurence + ")";
+        String q2 = "INSERT INTO APP.USERMODULE (USERID, R_MODULE, R_OCCURENCE) VALUES ('" + uid + "', '" + module + "', " + occurence + ")";
         try {
-            boolean MExist=checkModule();
+
+            boolean MExist = checkModule();
             boolean Clash = checkTime();
-            if(MExist){
-            JOptionPane.showMessageDialog(null, "Module already exist");
-            }
-            else if(Clash){
-                JOptionPane.showMessageDialog(null, "THE "+ activity +" FOR "+ module +" OCCURENCE "+ occurence +" CLASHES WITH " + activity2 +" FOR "+ module2 +" OCCURENCE " + occurence2+" ON "+ day + ".");
-            }
-            else{
-            ps = con.prepareStatement(q2);
-            ps.executeUpdate();
+            boolean Full = checkCapacity();
+            //if(MExist){
+            //JOptionPane.showMessageDialog(null, "Module already exist");
+            //}
+            if (Clash) {
+                JOptionPane.showMessageDialog(null, "THE " + activity + " FOR " + module + " OCCURENCE " + occurence + " CLASHES WITH " + activity2 + " FOR " + module2 + " OCCURENCE " + occurence2 + " ON " + day + ".");
+            } else if (Full) {
+                JOptionPane.showMessageDialog(null, "This occurence is full");
+            } else {
+                ps = con.prepareStatement(q2);
+                ps.executeUpdate();
                 dispose();
-            new WelcomePage().setVisible(true);
+                new WelcomePage().setVisible(true);
             }
-            } catch (SQLException e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
-            }
-        
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

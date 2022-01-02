@@ -50,6 +50,12 @@ public class LoginPage extends javax.swing.JFrame {
 
         jLabel2.setText("USERNAME :");
 
+        UserTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UserTextFieldActionPerformed(evt);
+            }
+        });
+
         jLabel3.setText("PASSWORD :");
 
         PasswordTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -163,6 +169,10 @@ public class LoginPage extends javax.swing.JFrame {
     private void PasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PasswordTextFieldActionPerformed
+
+    private void UserTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UserTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
