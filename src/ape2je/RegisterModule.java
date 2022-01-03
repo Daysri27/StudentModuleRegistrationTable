@@ -124,7 +124,6 @@ public class RegisterModule extends javax.swing.JFrame {
                         
                         boolean NoClashClassAfterEnd = (targetStart.isAfter(compareEnd) || targetStart.equals(compareEnd));
                         boolean NoClashClassBeforeStart = (targetEnd.isBefore(compareStart) || targetEnd.equals(compareStart));
-                        JOptionPane.showMessageDialog(null, NoClashClassAfterEnd + " " + NoClashClassBeforeStart);
                         if (NoClashClassAfterEnd || NoClashClassBeforeStart) {
                             
                             continue;
@@ -225,10 +224,10 @@ public class RegisterModule extends javax.swing.JFrame {
             boolean MExist = checkModule();
             boolean Clash = checkTime();
             boolean Full = checkCapacity();
-            //if(MExist){
-            //JOptionPane.showMessageDialog(null, "Module already exist");
-            //}
-            if (Clash) {
+            if(MExist){
+            JOptionPane.showMessageDialog(null, "Module already exist");
+            }
+            else if (Clash) {
                 JOptionPane.showMessageDialog(null, "THE " + activity + " FOR " + module + " OCCURENCE " + occurence + " CLASHES WITH " + activity2 + " FOR " + module2 + " OCCURENCE " + occurence2 + " ON " + day + ".");
             } else if (Full) {
                 JOptionPane.showMessageDialog(null, "This occurence is full");

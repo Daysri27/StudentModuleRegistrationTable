@@ -40,10 +40,8 @@ Connection con = ConnectDatabase.connectdb();
             ps = con.prepareStatement(q2);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int i = 0;
                 STUDENT = rs.getString("USERID");
                 String tbData[] = {STUDENT};
-                i++;
                 DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
                 tblModel.addRow(tbData);
             }

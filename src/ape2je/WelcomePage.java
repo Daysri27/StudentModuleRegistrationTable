@@ -54,13 +54,11 @@ public class WelcomePage extends javax.swing.JFrame {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int i = 0;
                 MODULES = rs.getString("MODULE");
                 CREDIT = rs.getString("CREDIT");
                 ACTIVITYTYPE = rs.getString("ACTIVITY");
 
                 String tbData[] = {MODULES, CREDIT, ACTIVITYTYPE};
-                i++;
                 DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
 
                 tblModel.addRow(tbData);

@@ -57,7 +57,6 @@ public class Moduledetails extends javax.swing.JFrame {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int i = 0;
                 OCC = rs.getString("OCCURENCE");
                 ACTIVITYTYPE = rs.getString("ACTIVITYTYPE");
                 LECTURER = rs.getString("LECTURER");
@@ -67,7 +66,7 @@ public class Moduledetails extends javax.swing.JFrame {
                 CAP = rs.getString("CAPACITY");
 
                 String tbData[] = {OCC,ACTIVITYTYPE, LECTURER, DAY, START, END,CAP};
-                i++;
+               
                 DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
 
                 tblModel.addRow(tbData);

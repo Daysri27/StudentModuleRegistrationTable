@@ -5,14 +5,27 @@
 package ape2je;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author user
  */
 public class EditCapacity extends javax.swing.JFrame {
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    PreparedStatement ps2 = null;
+    PreparedStatement ps3 = null;
     Connection con = ConnectDatabase.connectdb();
-    String capacity="";
+    LecturerViewModules lvm = new LecturerViewModules();
+    String mod = lvm.getMod();
+    String cap = lvm.getCap();
+    String act = lvm.getAct();
+    String occ = lvm.getOccu();
     /**
      * Creates new form EditCapacity
      */
@@ -30,15 +43,15 @@ public class EditCapacity extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        NewCapacity = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        NewCapacity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                NewCapacityActionPerformed(evt);
             }
         });
 
@@ -62,7 +75,7 @@ public class EditCapacity extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(NewCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(99, 99, 99)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -74,7 +87,7 @@ public class EditCapacity extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NewCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap(27, Short.MAX_VALUE))
@@ -83,14 +96,42 @@ public class EditCapacity extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void NewCapacityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewCapacityActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_NewCapacityActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String q1 = "";
+        String newcap = NewCapacity.getText();
+        String q1 = "SELECT * FROM VALIDMODULES2 WHERE MODULES = '" + mod + "' AND OCCURENCE = " + occ + "ORDER BY OCCURENCE";
+        String ACTIVITYTYPE = "";
+        String LECTURER = "";
+        String DAY = "";
+        String START = "";
+        String END = "";
+        String CAP ="";
+        try {
+            ps = con.prepareStatement(q1);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                DAY = rs.getString("DAY");
+                START = rs.getString("TIMESTART");
+                END = rs.getString("TIMEEND");
+                ACTIVITYTYPE = rs.getString("ACTIVITYTYPE");
+                LECTURER = rs.getString("LECTURER");
+                CAP = rs.getString("CAPACITY");
+                String q2 = "INSERT INTO APP.VALIDMODULES2 (MODULES, OCCURENCE, \"DAY\", TIMESTART, TIMEEND, ACTIVITYTYPE, LECTURER, CAPACITY)	VALUES ('"+mod+"', "+occ+", '"+DAY+"', '"+START+"', '"+END+"', '"+ACTIVITYTYPE+"', '"+LECTURER+"', "+newcap+")";
+                ps2 = con.prepareStatement(q2);
+                ps2.executeUpdate();
+                String q3 = "DELETE FROM APP.VALIDMODULES2 WHERE MODULES = '"+mod+"' AND OCCURENCE = "+occ+" AND \"DAY\" = '"+DAY+"' AND TIMESTART = '"+START+"' AND TIMEEND = '"+END+"' AND ACTIVITYTYPE = '"+ACTIVITYTYPE+"' AND LECTURER = '"+LECTURER+"' AND CAPACITY = "+CAP+"";
+                ps3 = con.prepareStatement(q3);
+                ps3.executeUpdate();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        JOptionPane.showMessageDialog(null, "Capacity updated !");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -129,8 +170,8 @@ public class EditCapacity extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField NewCapacity;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

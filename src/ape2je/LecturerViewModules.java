@@ -27,7 +27,7 @@ Connection con = ConnectDatabase.connectdb();
     PreparedStatement ps2 = null;
     ResultSet rs2 = null;
     //LoginPage lp = new LoginPage();
-    String lecturer = "DR LIM CHEE KAU";//lp.getUserID();
+    String lecturer = "DR ANG TAN FOONG";//lp.getUserID();
     /**
      * Creates new form LecturerViewModules
      */
@@ -202,7 +202,7 @@ Connection con = ConnectDatabase.connectdb();
     // End of variables declaration//GEN-END:variables
 
 public void retrieveData() {
-        String q1 = "SELECT * FROM VALIDMODULES2 WHERE LECTURER = '" + lecturer + "' ORDER BY MODULES";
+        String q1 = "SELECT * FROM VALIDMODULES2 WHERE LECTURER = '" + lecturer + "' ORDER BY OCCURENCE";
         String ACTIVITYTYPE = "";
         String LECTURER = "";
         String DAY = "";
