@@ -19,6 +19,8 @@ public class StudentViewModules extends javax.swing.JFrame {
 Connection con = ConnectDatabase.connectdb();
     PreparedStatement ps = null;
     ResultSet rs = null;
+    LoginPage lp = new LoginPage();
+    String uid=lp.getUserID();
     /**
      * Creates new form StudentViewModules
      */
@@ -28,7 +30,7 @@ Connection con = ConnectDatabase.connectdb();
     }
     
     public void retrieveData() {
-        String q1 = "SELECT * FROM USERMODULE INNER JOIN VALIDMODULES2 ON R_MODULE=MODULES AND R_OCCURENCE=OCCURENCE WHERE USERID='asd' ORDER BY MODULES";
+        String q1 = "SELECT * FROM USERMODULE INNER JOIN VALIDMODULES2 ON R_MODULE=MODULES AND R_OCCURENCE=OCCURENCE WHERE USERID='"+uid+"' ORDER BY MODULES";
         String OCC = "";
         String ACTIVITYTYPE = "";
         String LECTURER = "";

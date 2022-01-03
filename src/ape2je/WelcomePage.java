@@ -21,7 +21,7 @@ public class WelcomePage extends javax.swing.JFrame {
     PreparedStatement ps = null;
     ResultSet rs = null;
     LoginPage lp = new LoginPage();
-    String uid = "asd";//lp.getUserID();
+    String uid = lp.getUserID();
     static String moduleCode ="";
     static String credit="";
     /**
@@ -245,7 +245,7 @@ public class WelcomePage extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        
+        new StudentViewModules().setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

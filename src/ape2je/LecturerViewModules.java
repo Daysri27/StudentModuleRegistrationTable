@@ -27,7 +27,7 @@ Connection con = ConnectDatabase.connectdb();
     PreparedStatement ps2 = null;
     ResultSet rs2 = null;
     //LoginPage lp = new LoginPage();
-    String lecturer = "DR ANG TAN FOONG";//lp.getUserID();
+    String lecturer = "DR LIM CHEE KAU";//lp.getUserID();
     /**
      * Creates new form LecturerViewModules
      */
@@ -216,8 +216,9 @@ public void retrieveData() {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
             while (rs.next()) {
+                MODULE = rs.getString("MODULES");
                 OCC = rs.getString("OCCURENCE");
-                String q2 = "SELECT DISTINCT USERID FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES2 ON USERMODULE.R_MODULE = VALIDMODULES2.MODULES AND USERMODULE.R_OCCURENCE = VALIDMODULES2.OCCURENCE WHERE OCCURENCE = " + OCC;
+                String q2 = "SELECT DISTINCT USERID FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES2 ON USERMODULE.R_MODULE = VALIDMODULES2.MODULES AND USERMODULE.R_OCCURENCE = VALIDMODULES2.OCCURENCE WHERE MODULES = '"+ MODULE +"' AND OCCURENCE = " + OCC;
                 ps2 = con.prepareStatement(q2);
                 rs2 = ps2.executeQuery();
                 while (rs2.next()){
@@ -225,7 +226,6 @@ public void retrieveData() {
             }
                 String s=String.valueOf(j);
                 int i = 0;
-                MODULE = rs.getString("MODULES");
                 ACTIVITYTYPE = rs.getString("ACTIVITYTYPE");
                 LECTURER = rs.getString("LECTURER");
                 DAY = rs.getString("DAY");
