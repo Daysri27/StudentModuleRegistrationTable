@@ -111,6 +111,10 @@ public class EditCapacity extends javax.swing.JFrame {
         String START = "";
         String END = "";
         String CAP ="";
+        if(Integer.parseInt(act)>Integer.parseInt(newcap)){
+                JOptionPane.showMessageDialog(null, "The capacity is less than the registered student. Please insert a higher number.");
+            }
+        else{
         try {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
@@ -132,6 +136,7 @@ public class EditCapacity extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
         JOptionPane.showMessageDialog(null, "Capacity updated !");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
