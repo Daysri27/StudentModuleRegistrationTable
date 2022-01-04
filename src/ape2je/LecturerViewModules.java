@@ -211,11 +211,11 @@ public void retrieveData() {
         String MODULE = "";
         String CAPACITY = "";
         String OCC = "";
-        int j=0;
         try {
             ps = con.prepareStatement(q1);
             rs = ps.executeQuery();
             while (rs.next()) {
+                int j=0;
                 MODULE = rs.getString("MODULES");
                 OCC = rs.getString("OCCURENCE");
                 String q2 = "SELECT DISTINCT USERID FROM APP.USERMODULE INNER JOIN APP.VALIDMODULES2 ON USERMODULE.R_MODULE = VALIDMODULES2.MODULES AND USERMODULE.R_OCCURENCE = VALIDMODULES2.OCCURENCE WHERE MODULES = '"+ MODULE +"' AND OCCURENCE = " + OCC;
